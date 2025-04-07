@@ -158,7 +158,7 @@ def process_prompt_and_add_tasks(state, model_choice):
 
         # VACE specific validation (e.g., resolution)
         if "1.3B" in model_filename:
-            resolution_reformated = f"{height}x{width}" # Check VACE_SIZE_CONFIGS format
+            resolution_reformated = f"{height}*{width}" # Check VACE_SIZE_CONFIGS format
             if resolution_reformated not in VACE_SIZE_CONFIGS:
                 allowed_res = " and ".join(VACE_SIZE_CONFIGS.keys())
                 gr.Info(f"Video Resolution {resolution} for Vace 1.3B model is not supported. Only {allowed_res} resolutions are allowed.")
