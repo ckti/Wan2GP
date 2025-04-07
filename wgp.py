@@ -433,14 +433,15 @@ def maybe_start_processing(state, progress=gr.Progress()):
     if queue and not in_progress:
         initial_status = "Starting automatic processing..."
         yield initial_status
-        try:
+        if True:
+        # try:
             for status_update in process_tasks(state, progress):
                  print(f"*** Yielding from process_tasks: '{status_update}' ***")
                  yield status_update
-            print(f"*** Finished iterating process_tasks normally. ***")
-        except Exception as e:
-             print(f"*** Error during maybe_start_processing -> process_tasks: {e} ***")
-             yield f"Error during processing: {str(e)}"
+            # print(f"*** Finished iterating process_tasks normally. ***")
+        # except Exception as e:
+        #      print(f"*** Error during maybe_start_processing -> process_tasks: {e} ***")
+        #      yield f"Error during processing: {str(e)}"
     else:
         last_msg = gen.get("last_msg", "Idle")
         initial_status = last_msg
@@ -1961,7 +1962,8 @@ def generate_video(
     loaded_image_end_pil = None
     loaded_image_refs_pil = []
 
-    try:
+    # try:
+    if True:
         if image_start and isinstance(image_start, str) and Path(image_start).is_file():
             loaded_image_start_pil = convert_image(Image.open(image_start))
         elif image_start:
@@ -1973,16 +1975,16 @@ def generate_video(
              print(f"Warning: End image path not found or invalid: {image_end}")
 
         if image_refs and isinstance(image_refs, list):
-            valid_ref_paths = [p for p in image_refs if p and Path(p).is_file()]
+            valid_ref_paths = [p[0] for p in image_refs if p and Path(p[0]).is_file()]
             if len(valid_ref_paths) != len(image_refs):
                 print("Warning: Some VACE reference image paths were invalid.")
             loaded_image_refs_pil = [convert_image(Image.open(p)) for p in valid_ref_paths]
             if not loaded_image_refs_pil and "I" in (video_prompt_type or ""):
                  print("Warning: No valid VACE reference images loaded despite type 'I'.")
 
-    except Exception as e:
-        print(f"ERROR loading image file: {e}")
-        raise gr.Error(f"Failed to load input image: {e}")
+    # except Exception as e:
+    #     print(f"ERROR loading image file: {e}")
+    #     raise gr.Error(f"Failed to load input image: {e}")
 
     loras = state["loras"]
     if len(loras) > 0:
@@ -2061,7 +2063,7 @@ def generate_video(
     if "Vace" in model_filename:
         src_video, src_mask, src_ref_images = wan_model.prepare_source([video_guide],
                                                                 [video_mask],
-                                                                [image_refs],
+                                                                [loaded_image_refs_pil],
                                                                 video_length, VACE_SIZE_CONFIGS[resolution_reformated], "cpu",
                                                                 trim_video=max_frames)
     else:
