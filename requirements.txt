@@ -14,7 +14,7 @@ dashscope
 imageio-ffmpeg
 # flash_attn    
 gradio==5.23.0   
-numpy>=1.23.5,<2
+numpy==2.3.0
 einops
 moviepy==1.0.3
 mmgp==3.4.9
